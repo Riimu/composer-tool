@@ -67,13 +67,11 @@ abstract class BaseCommand extends Command
     {
         $path = $input->getOption('config');
 
-        $this->write(getcwd());
-
         if (!$path) {
             if (file_exists('composer-tool.json')) {
                 $path = 'composer-tool.json';
-            } elseif (file_exists(__DIR__ . '/../../../vendor')) {
-                $path = __DIR__ . '/../../../vendor/composer-tool.json';
+            } elseif (file_exists(__DIR__ . '/../../../../vendor')) {
+                $path = __DIR__ . '/../../../../vendor/composer-tool.json';
             } else {
                 $path = 'composer-tool.json';
             }
