@@ -7,22 +7,22 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * UpdateCommand.
+ * ShowCommand.
  *
  * @author Riikka Kalliomäki <riikka.kalliomaki@gmail.com>
  * @copyright Copyright (c) 2016, Riikka Kalliomäki
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
-class UpdateCommand extends BaseCommand
+class ShowCommand extends BaseCommand
 {
     public function configure()
     {
-        $this->setName('update')
-            ->setDescription('Updates composer tools')
+        $this->setName('show')
+            ->setDescription('Shows information about installed composer tools')
             ->addArgument(
                 'package',
                 InputArgument::OPTIONAL,
-                'Optional package to update'
+                'Optional package to show'
             );
 
         parent::configure();
@@ -40,10 +40,7 @@ class UpdateCommand extends BaseCommand
             $path = $this->getPackagePath($package);
 
             if (file_exists($path . DIRECTORY_SEPARATOR . 'composer.json')) {
-                $this->write('');
-                $this->write("# Updating package '$package'");
-
-                $code = $this->runCommand('update', $path, []);
+                 $code = $this->runCommand('show', $path, ['-D']);
 
                 if ($code !== 0) {
                     $result = 1;
