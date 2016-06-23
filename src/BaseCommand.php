@@ -79,7 +79,7 @@ abstract class BaseCommand extends Command
 
         $this->configBase = [];
         $this->config = [
-            'bin-dir' => 'bin',
+            'bin-dir' => 'vendor/bin',
             'lib-dir' => 'tools',
             'composer-path' => 'composer',
         ];
