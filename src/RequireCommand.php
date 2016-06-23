@@ -73,6 +73,8 @@ class RequireCommand extends BaseCommand
     private function addPackage($package, $version)
     {
         $this->configBase['require'][$package] = $version;
+        ksort($this->configBase['require']);
+
         $json = json_encode($this->configBase, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         if (file_put_contents($this->configPath, $json, LOCK_EX) === false) {

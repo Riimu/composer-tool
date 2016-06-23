@@ -33,20 +33,16 @@ class UpdateCommand extends BaseCommand
         parent::execute($input, $output);
 
         $package = $input->getArgument('package');
-
-        if ($package) {
-            $packages = [$package];
-        } else {
-            $packages = $this->getPackages();
-        }
-
+        $packages = $package ? [$package] : $this->getPackages();
         $result = 0;
 
         foreach ($packages as $package) {
             $path = $this->getPackagePath($package);
 
             if (file_exists($path . DIRECTORY_SEPARATOR . 'composer.json')) {
-                $this->write("Updating package '$package'");
+                $this->write('');
+                $this->write("# Updating package '$package'");
+
                 $code = $this->runCommand('update', $path, []);
 
                 if ($code !== 0) {
