@@ -18,11 +18,11 @@ class UpdateCommand extends BaseCommand
     public function configure()
     {
         $this->setName('update')
-            ->setDescription('Updates composer tools')
+            ->setDescription('OpUpdates composer tools')
             ->addArgument(
                 'package',
                 InputArgument::OPTIONAL,
-                'The package to update'
+                'Optional package to update'
             );
 
         parent::configure();
