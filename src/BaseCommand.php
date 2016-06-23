@@ -71,7 +71,7 @@ abstract class BaseCommand extends Command
             if (file_exists('composer-tool.json')) {
                 $path = 'composer-tool.json';
             } elseif (file_exists(__DIR__ . '/../../../../vendor')) {
-                $path = __DIR__ . '/../../../../vendor/composer-tool.json';
+                $path = __DIR__ . '/../../../../composer-tool.json';
             } else {
                 $path = 'composer-tool.json';
             }
