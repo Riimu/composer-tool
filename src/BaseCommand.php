@@ -130,9 +130,13 @@ abstract class BaseCommand extends Command
 
     protected function getPackagePath($package)
     {
+        if (!strpos('/', $package) === false) {
+            throw new \InvalidArgumentException("Invalid package name '$package'");
+        }
+
         $parts = explode('/', $package, 2);
 
-        return $this->config['lib-dir'] . DIRECTORY_SEPARATOR . reset($parts);
+        return $this->config['lib-dir'] . DIRECTORY_SEPARATOR . end($parts);
     }
 
     protected function runCommand($command, $workingDirectory, array $arguments)
@@ -150,5 +154,56 @@ abstract class BaseCommand extends Command
         passthru($command, $return);
 
         return $return;
+    }
+
+    protected function getPackages()
+    {
+        if (!file_exists($this->config['lib-dir'])) {
+            return [];
+        }
+
+        $packages = [];
+
+        foreach (new \DirectoryIterator($this->config['lib-dir']) as $dir) {
+            if (!$dir->isDir() || $dir->isDot()) {
+                continue;
+            }
+
+            $composer = $dir->getPathname() . DIRECTORY_SEPARATOR . 'composer.json';
+
+            if (file_exists($composer)) {
+                $package = $this->parsePackage($composer, $dir->getFilename());
+
+                if ($package) {
+                    $packages[] = $package;
+                }
+            }
+        }
+
+        return $packages;
+    }
+
+    private function parsePackage($file, $name)
+    {
+        $json = json_decode(file_get_contents($file), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->error("Could not parse file '$file'");
+            return false;
+        }
+
+        if (empty($json['require'])) {
+            return false;
+        }
+
+        foreach ($json['require'] as $package => $version) {
+            $parts = explode('/', $package);
+
+            if (strcasecmp($name, end($parts)) === 0) {
+                return $package;
+            }
+        }
+
+        return false;
     }
 }
